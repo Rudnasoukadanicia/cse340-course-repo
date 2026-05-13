@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
 import express from 'express';
-import { testConnection } from './src/models/db.js';
+import db, { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 
 // Define the the application environment
@@ -17,6 +17,15 @@ const __dirname = path.dirname(__filename);
 
 // Define the port number the server will listen on
 const app = express();
+
+
+//Set EJS as the templating engine
+app.set('view engine', 'ejs');
+
+//Tell Express where to find the EJS templates
+app.set('views', path.join(__dirname, 'src/views'));
+
+
 
 /**
  * Configure Express middleware
@@ -34,11 +43,18 @@ app.get('/', async (req, res) => {
     const title = 'Home';
     res.render('home', { title });
 });
-app.get('/organizations', async (req, res) => {
-    const organizations = await getAllOrganizations();
-    const title = 'Our Partner Organizations';
 
-    res.render('organizations', { title, organizations });
+app.get('/organizations', async (req, res) => {
+    try {
+        const organizations = await getAllOrganizations();
+        res.render('organizations', {
+            title: 'Organizations',
+            organizations
+        });
+    } catch (err) {
+        console.error('Organizations error:', err.message);
+        res.status(500).send('Database connection lost');
+    }
 });
 app.get('/projects', async (req, res) => {
     const title = 'Projects';
@@ -50,22 +66,16 @@ app.get('/categories', async (req, res) => {
     res.render('categories', { title })
 });
 
-
+await testConnection();
 app.listen(PORT, async () => {
     try {
-        await testConnection();
+        
         console.log(`Server is running at http://127.0.0.1:${PORT}`);
         console.log(`Environment: ${NODE_ENV}`);
     } catch (error) {
         console.error('Error connecting to the database:', error);
+        process.exit(1); // Exit the process with an error code
     }
 });
-
-
-//Set EJS as the templating engine
-app.set('view engine', 'ejs');
-
-//Tell Express where to find the EJS templates
-app.set('views', path.join(__dirname, 'src/views'));
 
 

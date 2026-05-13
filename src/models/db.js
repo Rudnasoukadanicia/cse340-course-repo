@@ -13,7 +13,12 @@ import { Pool } from 'pg';
  */
 const pool = new Pool({
     connectionString: process.env.DB_URL,
-    ssl: true
+    ssl: {
+        rejectUnauthorized: false
+    },
+    connectionTimeoutMillis: 10000,
+    idleTimeoutMillis: 30000,
+    keepAlive: true
 });
 
 /**
@@ -89,3 +94,6 @@ const testConnection = async () => {
 };
 
 export { db as default, testConnection };
+pool.on('error', err => {
+    console.error('Unexpected PG error', err);
+});
