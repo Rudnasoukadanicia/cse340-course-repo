@@ -1,0 +1,70 @@
+CREATE TABLE project (
+    project_id SERIAL PRIMARY KEY,
+    organization_id INTEGER NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    location_project VARCHAR(100),
+    date_project DATE NOT NULL,
+
+    CONSTRAINT fk_organization
+        FOREIGN KEY (organization_id)
+        REFERENCES organization(organization_id)
+);
+
+INSERT INTO project
+(organization_id, title, description, location_project, date_project)
+VALUES
+
+-- ORGANIZATION 1 (GreenHarvest)
+(1, 'Tree Planting', 'Plant trees in city parks', 'New York', '2026-06-01'),
+(1, 'Urban Gardening', 'Community gardens', 'Boston', '2026-06-05'),
+(1, 'Forest Cleanup', 'Remove waste', 'Denver', '2026-06-10'),
+(1, 'Water Conservation', 'Save water awareness', 'Seattle', '2026-06-15'),
+(1, 'Recycling Drive', 'Promote recycling', 'Chicago', '2026-06-20'),
+
+-- ORGANIZATION 2 (UnityServe)
+(2, 'Food Drive', 'Help families in need', 'Miami', '2026-07-01'),
+(2, 'School Support', 'Provide school supplies', 'Dallas', '2026-07-05'),
+(2, 'Clothing Donation', 'Donate clothes', 'Atlanta', '2026-07-10'),
+(2, 'Community Cooking', 'Cook for homeless', 'Houston', '2026-07-12'),
+(2, 'Elder Care', 'Assist elders', 'Phoenix', '2026-07-15'),
+
+-- ORGANIZATION 3 (BrightFuture)
+(3, 'Health Camp', 'Free medical services', 'Chicago', '2026-08-01'),
+(3, 'Education Program', 'Teach children', 'Los Angeles', '2026-08-05'),
+(3, 'Sports Event', 'Youth activities', 'San Diego', '2026-08-10'),
+(3, 'Tech Workshop', 'Coding basics', 'San Jose', '2026-08-15'),
+(3, 'Career Training', 'Job preparation', 'San Francisco', '2026-08-20');
+
+CREATE TABLE categories (
+  categories_id SERIAL PRIMARY KEY,
+  name_categories VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE project_categories (
+  project_id INTEGER,
+  categories_id INTEGER,
+
+  PRIMARY KEY (project_id, categories_id),
+
+  FOREIGN KEY (project_id)
+    REFERENCES project(project_id)
+
+  FOREIGN KEY (categories_id)
+    REFERENCES categories(categories_id)
+    
+);
+
+INSERT INTO categories (name_categories)
+VALUES
+('Environment'),
+('Education'),
+('Health');
+
+INSERT INTO project_categories (project_id, categories_id)
+VALUES
+(1, 1),
+(2, 2),
+(3, 1),
+(4, 3),
+(5, 2);
