@@ -4,7 +4,7 @@
         <h1>
             <%= title %>
         </h1>
-
+<!-- 
         <ul>
             <% projects.forEach(project=> { %>
                 <li>
@@ -13,6 +13,20 @@
                     </strong> :
                     <%= project.title %>
                         (<%= project.organization_name %>)
+                </li>
+                <% }) %>
+        </ul> -->
+
+        <ul>
+            <% projects.forEach(project=> { %>
+                <li>
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
+        
+                    <a href="/organization/<%= project.organization_id %>">
+                        <%= project.organization_name %>
+                    </a>
                 </li>
                 <% }) %>
         </ul>

@@ -41,4 +41,36 @@ const getProjectsByOrganizationId = async (organizationId) => {
   return result.rows;
 };
 
-export { getAllProjects, getProjectsByOrganizationId };
+export { getProjectsByOrganizationId };
+
+const getUpcomingProjects = async (limit) => {
+  const sql = `
+        SELECT p.project_id, p.title, p.description, p.date_project, p.location_project,
+               p.organization_id, o.name AS organization_name
+        FROM projects p
+        JOIN organizations o ON p.organization_id = o.organization_id
+        WHERE p.date >= CURRENT_DATE
+        ORDER BY p.date ASC
+        LIMIT ?
+    `;
+
+  const [rows] = await pool.execute(sql, [limit]);
+  return rows;
+};
+
+export { getUpcomingProjects };
+  
+const getProjectDetails = async (id) => {
+  const sql = `
+        SELECT p.project_id, p.title, p.description, p.date_project, p.location_project,
+               p.organization_id, o.name AS organization_name
+        FROM projects p
+        JOIN organizations o ON p.organization_id = o.organization_id
+        WHERE p.project_id = ?
+    `;
+
+  const [rows] = await pool.execute(sql, [id]);
+  return rows[0];
+};
+
+export { getProjectDetails };

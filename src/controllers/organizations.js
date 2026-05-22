@@ -1,5 +1,5 @@
 import { getAllOrganizations } from '../models/organizations.js';
-import { getAllOrganizations, getOrganizationDetails } from '../models/organizations.js';
+import { getOrganizationDetails } from '../models/organizations.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 
 const organizationsPage = async (req, res) => {
@@ -20,4 +20,5 @@ const showOrganizationDetailsPage = async (req, res) => {
 };
 
 // Export any controller functions
-export { showOrganizationsPage, showOrganizationDetailsPage };
+export { organizationsPage };
+export { showOrganizationDetailsPage };
