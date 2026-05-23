@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+    <main>
+        <h1>
+            <%= organization.name %>
+        </h1>
+
+        <p>
+            <%= organization.description %>
+        </p>
+        <p><strong>Email:</strong>
+            <%= organization.contact_email %>
+        </p>
+
+        <h3>Projects:</h3>
+
+        <ul>
+            <% projects.forEach(project=> { %>
+                <li>
+                    ">
+                    <%= project.title %>
+                        </a>
+                </li>
+                <% }) %>
+        </ul>
+    </main>
+
+    <%- include('partials/footer') %>
+        

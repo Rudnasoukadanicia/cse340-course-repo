@@ -8,14 +8,16 @@ import { projectsPage } from './controllers/projects.js';
 import { showOrganizationDetailsPage } from './controllers/organizations.js';
 
 import { showProjectDetailsPage } from './controllers/projects.js';
+import { showCategoryDetailsPage } from './controllers/categories.js';
 
 const router = express.Router();
 
 router.get('/', indexPage);
 router.get('/categories', categoriesPages);
+router.get('/category/:id', showCategoryDetailsPage);
 router.get('/organizations', organizationsPage);
 router.get('/test-error', testErrorPage);
 router.get('/projects', projectsPage);
-router.get('/organizations/:id', showOrganizationDetailsPage);
-router.get('/projects/:id', showProjectDetailsPage);
+router.get('/organization/:id', showOrganizationDetailsPage);
+router.get('/project/:id', showProjectDetailsPage);
 export default router;

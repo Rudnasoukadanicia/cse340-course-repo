@@ -48,6 +48,10 @@ nav a:focus {
     text-decoration: double underline;
 }
 
+a{
+    color: #0d47a1;
+    text-decoration: none;
+}
 /* =========================
    MAIN CONTENT
 ========================= */

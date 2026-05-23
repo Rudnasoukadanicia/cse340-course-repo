@@ -5,13 +5,16 @@
             <%= title %>
         </h1>
 
-        <ul>
-            <% categories.forEach(category=> { %>
-                <li>
-                    <%= category.name_categories %>
-                </li>
-                <% }) %>
-        </ul>
+    <ul>
+        <% categories.forEach(category=> { %>
+            <li>
+                <a href="/category/<%= category.categories_id %>">
+                <%= category.name_categories %>
+                    </a>
+            </li>
+            <% }) %>
+    </ul>
+
     </main>
 
     <%- include('partials/footer') %>

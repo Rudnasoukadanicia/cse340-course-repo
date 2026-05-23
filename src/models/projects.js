@@ -34,9 +34,7 @@ const getProjectsByOrganizationId = async (organizationId) => {
         WHERE organization_id = $1
         ORDER BY date_project DESC;
       `;
-
-  const queryParams = [organizationId];
-  const result = await db.query(query, queryParams);
+  const result = await db.query(query, [organizationId]);
 
   return result.rows;
 };
@@ -47,15 +45,15 @@ const getUpcomingProjects = async (limit) => {
   const sql = `
         SELECT p.project_id, p.title, p.description, p.date_project, p.location_project,
                p.organization_id, o.name AS organization_name
-        FROM projects p
-        JOIN organizations o ON p.organization_id = o.organization_id
-        WHERE p.date >= CURRENT_DATE
-        ORDER BY p.date ASC
-        LIMIT ?
+        FROM project p
+        JOIN organization o ON p.organization_id = o.organization_id
+        WHERE p.date_project >= CURRENT_DATE
+        ORDER BY p.date_project ASC
+        LIMIT $1;
     `;
 
-  const [rows] = await pool.execute(sql, [limit]);
-  return rows;
+  const result = await db.query(sql, [limit]);
+  return result.rows;
 };
 
 export { getUpcomingProjects };
@@ -64,13 +62,13 @@ const getProjectDetails = async (id) => {
   const sql = `
         SELECT p.project_id, p.title, p.description, p.date_project, p.location_project,
                p.organization_id, o.name AS organization_name
-        FROM projects p
-        JOIN organizations o ON p.organization_id = o.organization_id
-        WHERE p.project_id = ?
+        FROM project p
+        JOIN organization o ON p.organization_id = o.organization_id
+        WHERE p.project_id = $1
     `;
 
-  const [rows] = await pool.execute(sql, [id]);
-  return rows[0];
+  const result = await db.query(sql, [id]);
+  return result.rows[0];
 };
 
 export { getProjectDetails };

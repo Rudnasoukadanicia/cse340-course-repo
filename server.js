@@ -7,17 +7,13 @@ import router from './src/routes.js';
 // Define the the application environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
-// define the port number the server will listen on, using an environment variable or defaulting to 3000
-
 const PORT = process.env.PORT || 3000;
 // get the current file path and directory
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Define the port number the server will listen on
 const app = express();
-
 
 app.use(express.static(path.join(__dirname, 'public')));
 
