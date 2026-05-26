@@ -15,6 +15,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Allow Express to receive and process common POST data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set EJS as the templating engine
