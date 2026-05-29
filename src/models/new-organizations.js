@@ -30,3 +30,4 @@ const createOrganization = async (name, description, contactEmail, logoFilename)
 };
 
 export { createOrganization };
+

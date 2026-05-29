@@ -43,6 +43,6 @@ const updateOrganization = async (organizationId, name, description, contactEmai
   return result.rows[0].organization_id;
 };
 
-export { getAllOrganizations }
-export { getOrganizationById }
-export { updateOrganization}
+export { getAllOrganizations };
+export { getOrganizationById };
+export { updateOrganization };
