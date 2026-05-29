@@ -5,7 +5,7 @@
             <%= title %>
         </h1>
 
-        /edit-project/<%= project.project_id %>" method="POST">
+        <form action="/edit-project/<%= project.project_id %>" method="POST">
 
             <label>Title</label>
             <input type="text" name="title" value="<%= project.title %>" required>
