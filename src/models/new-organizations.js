@@ -1,3 +1,5 @@
+import db from './db.js';
+
 /**
  * Creates a new organization in the database.
  * @param {string} name - The name of the organization.

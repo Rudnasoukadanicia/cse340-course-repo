@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+    <main>
+        <h1>
+            <%= title %>
+        </h1>
+
+        /edit-project/<%= project.project_id %>" method="POST">
+
+            <label>Title</label>
+            <input type="text" name="title" value="<%= project.title %>" required>
+
+            <label>Description</label>
+            <textarea name="description" required>
+<%= project.description %>
+    </textarea>
+
+            <label>Date</label>
+            <input type="date" name="date_project" value="<%= project.date_project.toISOString().split('T')[0] %>"
+                required>
+
+            <label>Location</label>
+            <input type="text" name="location_project" value="<%= project.location_project %>">
+
+            <label>Organization</label>
+            <select name="organization_id">
+                <% organizations.forEach(org=> { %>
+                    <option value="<%= org.organization_id %>" <%=org.organization_id===project.organization_id
+                        ? 'selected' : '' %>>
+                        <%= org.name %>
+                    </option>
+                    <% }) %>
+            </select>
+
+            <button type="submit">Update Project</button>
+            </form>
+    </main>
+
+    <%- include('partials/footer') %>
+    

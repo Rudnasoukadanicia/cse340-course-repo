@@ -45,7 +45,60 @@ const getCategoryByProject = async (projectId) => {
   return result.rows;
 };
 
+const assignCategoryToProject = async (categoryId, projectId) => {
+  const query = `
+        INSERT INTO project_category (category_id, project_id)
+        VALUES ($1, $2);
+    `;
+
+  await db.query(query, [categoryId, projectId]);
+}
+
+const updateCategoryAssignments = async (projectId, categoryIds) => {
+  // First, remove existing category assignments for the project
+  const deleteQuery = `
+        DELETE FROM project_category
+        WHERE project_id = $1;
+    `;
+  await db.query(deleteQuery, [projectId]);
+
+  // Next, add the new category assignments
+  for (const categoryId of categoryIds) {
+    await assignCategoryToProject(categoryId, projectId);
+  }
+};
+const createCategory = async (name) => {
+  const query = `
+    INSERT INTO categories (name_categories)
+    VALUES ($1)
+    RETURNING categories_id;
+  `;
+
+  const result = await db.query(query, [name]);
+  return result.rows[0];
+};
+const updateCategory = async (id, name) => {
+  const query = `
+    UPDATE categories
+    SET name_categories = $1
+    WHERE categories_id = $2
+    RETURNING categories_id;
+  `;
+
+  const result = await db.query(query, [name, id]);
+
+  if (result.rows.length === 0) {
+    throw new Error("Category not found");
+  }
+
+  return result.rows[0];
+};
+
 export { getAllCategories };
 export { getCategoryById };
 export { getProjectsByCategory };
 export { getCategoryByProject };
+export { createCategory };
+export { updateCategory };
+export { assignCategoryToProject };
+export { updateCategoryAssignments };
