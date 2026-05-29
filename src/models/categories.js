@@ -1,13 +1,13 @@
 import db from './db.js';
 
 const getAllCategories = async () => {
-    const query = `
+  const query = `
     SELECT categories_id, name_categories
     FROM public.categories;
   `;
 
-    const result = await db.query(query);
-    return result.rows;
+  const result = await db.query(query);
+  return result.rows;
 };
 
 const getCategoryById = async (id) => {
@@ -16,7 +16,7 @@ const getCategoryById = async (id) => {
         FROM public.categories
         WHERE categories_id = $1;
     `;
-  
+
   const result = await db.query(sql, [id]);
   return result.rows[0];
 };
@@ -94,11 +94,13 @@ const updateCategory = async (id, name) => {
   return result.rows[0];
 };
 
-export { getAllCategories };
-export { getCategoryById };
-export { getProjectsByCategory };
-export { getCategoryByProject };
-export { createCategory };
-export { updateCategory };
-export { assignCategoryToProject };
-export { updateCategoryAssignments };
+export {
+  getAllCategories,
+  getCategoryById,
+  getProjectsByCategory,
+  getCategoryByProject,
+  createCategory,
+  updateCategory,
+  assignCategoryToProject,
+  updateCategoryAssignments
+};

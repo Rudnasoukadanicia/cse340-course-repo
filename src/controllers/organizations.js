@@ -6,10 +6,7 @@ import { getOrganizationById } from '../models/organizations.js';
 import { createOrganization } from '../models/new-organizations.js';
 import { updateOrganization } from '../models/organizations.js';
 
-
-
 // Define validation and sanitization rules for organization form
-// Define validation rules for organization form
 const organizationValidation = [
     body('name')
         .trim()
@@ -27,9 +24,10 @@ const organizationValidation = [
         .escape(),
     body('contactEmail')
         .trim()
-        
-        .notEmpty().withMessage('Contact email is required')
-        .isEmail().withMessage('Please provide a valid email address')
+        .notEmpty()
+        .withMessage('Contact email is required')
+        .isEmail()
+        .withMessage('Please provide a valid email address')
 ];
 
 
@@ -83,15 +81,15 @@ const processNewOrganizationForm = async (req, res) => {
     console.log("ERRORS:", results.array());
 
     // Check for validation errors
-   
+
     if (!results.isEmpty()) {
         // Validation failed - loop through errors
         results.array().forEach((error) => {
             req.flash('error', error.msg);
         });
 
-        // Redirect back to the edit organization form
-        return res.redirect('/edit-organization/' + req.params.id);
+        // Redirect back to the new organization form
+        return res.redirect('/new-organization');
     }
 
     const { name, description, contactEmail } = req.body;

@@ -18,11 +18,11 @@
         <ul>
             <% projects.forEach(project=> { %>
                 <li>
-                    ">
-                    <%= project.title %>
-                        </a>
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
                 </li>
-                <% }) %>
+            <% }) %>
         </ul>
         <p>
             <a href="/edit-organization/<%= organization.organization_id %>">

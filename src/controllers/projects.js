@@ -1,12 +1,8 @@
 import { body, validationResult } from 'express-validator';
 
-import { getAllProjects } from '../models/projects.js';
-import { getUpcomingProjects } from '../models/projects.js';
-import { getProjectDetails } from '../models/projects.js';
+import { getAllProjects, getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
 import { getCategoryByProject } from '../models/categories.js';
-import { createProject } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
-import { updateProject } from '../models/projects.js';
 
 const projectValidation = [
     body('title')
@@ -30,7 +26,7 @@ const projectValidation = [
 ];
 
 export { projectValidation };
-    
+
 const projectsPage = async (req, res) => {
     const projects = await getAllProjects();
     const title = 'Projects';
@@ -89,7 +85,7 @@ const processNewProjectForm = async (req, res) => {
     //     res.redirect('/new-project');
     // }
 
-    
+
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -2,7 +2,7 @@ import {
     getAllCategories,
     getCategoryById,
     getProjectsByCategory,
-    getCategoryByProject ,
+    getCategoryByProject,
     updateCategoryAssignments,
     createCategory,
     updateCategory,
@@ -30,13 +30,12 @@ const showCategoryDetailsPage = async (req, res) => {
 const showAssignCategoriesForm = async (req, res) => {
     const projectId = req.params.projectId;
 
-    const projectDetails = await getProjectDetails(projectId);
     const categories = await getAllCategories();
-    const assignedCategories = await getCategoriesByServiceProjectId(projectId);
+    const assignedCategories = await getCategoryByProject(projectId);
 
     const title = 'Assign Categories to Project';
 
-    res.render('assign-categories', { title, projectId, projectDetails, categories, assignedCategories });
+    res.render('assign-categories', { title, projectId, categories, assignedCategories });
 };
 
 const processAssignCategoriesForm = async (req, res) => {
@@ -94,11 +93,13 @@ const processEditCategoryForm = async (req, res) => {
 
 
 
-export { categoriesPages };
-export { showCategoryDetailsPage };
-export { showAssignCategoriesForm };
-export { processAssignCategoriesForm };
-export { showNewCategoryForm };
-export { processNewCategoryForm };
-export { showEditCategoryForm };
-export { processEditCategoryForm };
+export {
+    categoriesPages,
+    showCategoryDetailsPage,
+    showAssignCategoriesForm,
+    processAssignCategoriesForm,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm
+};

@@ -1,5 +1,7 @@
 import express from 'express';
 
+const router = express.Router();
+
 // ====================
 // Controllers - Index
 // ====================
@@ -51,7 +53,6 @@ import {
 // =================
 import { categoryValidation } from './middleware/validators/categoryValidation.js';
 
-const router = express.Router();
 
 // =================
 // Home
@@ -69,32 +70,18 @@ router.get('/test-error', testErrorPage);
 router.get('/categories', categoriesPages);
 router.get('/category/:id', showCategoryDetailsPage);
 
-// Create Category
+// ✅ Create Category
 router.get('/new-category', showNewCategoryForm);
-router.post(
-    '/new-category',
-    categoryValidation,
-    processNewCategoryForm
-);
+router.post('/new-category', categoryValidation, processNewCategoryForm);
 
-// Edit Category
+// ✅ Edit Category
 router.get('/edit-category/:id', showEditCategoryForm);
-router.post(
-    '/edit-category/:id',
-    categoryValidation,
-    processEditCategoryForm
-);
+router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
-// Assign Categories to Project
-router.get(
-    '/assign-categories/:projectId',
-    showAssignCategoriesForm
-);
+// ✅ Assign Categories
+router.get('/assign-categories/:projectId', showAssignCategoriesForm);
+router.post('/assign-categories/:projectId', processAssignCategoriesForm);
 
-router.post(
-    '/assign-categories/:projectId',
-    processAssignCategoriesForm
-);
 
 // =================
 // Organizations Routes
@@ -102,23 +89,14 @@ router.post(
 router.get('/organizations', organizationsPage);
 router.get('/organization/:id', showOrganizationDetailsPage);
 
-// Create Organization
+// ✅ Create Organization
 router.get('/new-organization', showNewOrganizationForm);
+router.post('/new-organization', organizationValidation, processNewOrganizationForm);
 
-router.post(
-    '/new-organization',
-    organizationValidation,
-    processNewOrganizationForm
-);
-
-// Edit Organization
+// ✅ Edit Organization
 router.get('/edit-organization/:id', showEditOrganizationForm);
+router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 
-router.post(
-    '/edit-organization/:id',
-    organizationValidation,
-    processEditOrganizationForm
-);
 
 // =================
 // Projects Routes
@@ -126,22 +104,13 @@ router.post(
 router.get('/projects', projectsPage);
 router.get('/project/:id', showProjectDetailsPage);
 
-// Create Project
+// ✅ Create Project
 router.get('/new-project', showNewProjectForm);
+router.post('/new-project', projectValidation, processNewProjectForm);
 
-router.post(
-    '/new-project',
-    projectValidation,
-    processNewProjectForm
-);
-
-// Edit Project
+// ✅ Edit Project
 router.get('/edit-project/:id', showEditProjectForm);
+router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 
-router.post(
-    '/edit-project/:id',
-    projectValidation,
-    processEditProjectForm
-);
 
 export default router;

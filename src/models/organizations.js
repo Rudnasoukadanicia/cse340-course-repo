@@ -2,9 +2,9 @@ import db from './db.js';
 
 const getAllOrganizations = async () => {
   const query = `
-        SELECT organization_id, name, description, contact_email, logo_filename
-      FROM public.organization;
-    `;
+    SELECT organization_id, name, description, contact_email, logo_filename
+    FROM public.organization;
+  `;
 
   const result = await db.query(query);
 
@@ -13,14 +13,15 @@ const getAllOrganizations = async () => {
 
 const getOrganizationById = async (id) => {
   const sql = `
-        SELECT organization_id, name, description, contact_email, logo_filename
-        FROM public.organization
-        WHERE organization_id = $1
-    `;
+    SELECT organization_id, name, description, contact_email, logo_filename
+    FROM public.organization
+    WHERE organization_id = $1
+  `;
 
   const result = await db.query(sql, [id]);
   return result.rows[0];
 };
+
 const updateOrganization = async (organizationId, name, description, contactEmail, logoFilename) => {
   const query = `
     UPDATE organization
@@ -43,6 +44,4 @@ const updateOrganization = async (organizationId, name, description, contactEmai
   return result.rows[0].organization_id;
 };
 
-export { getAllOrganizations };
-export { getOrganizationById };
-export { updateOrganization };
+export { getAllOrganizations, getOrganizationById, updateOrganization };

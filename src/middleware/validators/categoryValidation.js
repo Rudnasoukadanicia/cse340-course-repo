@@ -7,4 +7,4 @@ const categoryValidation = [
         .withMessage('Must be between 3 and 100 characters')
 ];
 
-export { categoryValidation };
+export {categoryValidation} ;

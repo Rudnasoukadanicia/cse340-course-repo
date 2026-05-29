@@ -1,7 +1,7 @@
 import db from './db.js';
 
 const getAllProjects = async () => {
-    const query = `
+  const query = `
     SELECT 
       p.project_id,
       p.title,
@@ -15,11 +15,9 @@ const getAllProjects = async () => {
     ORDER BY p.date_project DESC;
   `;
 
-    const result = await db.query(query);
-    return result.rows;
+  const result = await db.query(query);
+  return result.rows;
 };
-
-export { getAllProjects };
 
 const getProjectsByOrganizationId = async (organizationId) => {
   const query = `
@@ -39,8 +37,6 @@ const getProjectsByOrganizationId = async (organizationId) => {
   return result.rows;
 };
 
-export { getProjectsByOrganizationId };
-
 const getUpcomingProjects = async (limit) => {
   const sql = `
         SELECT p.project_id, p.title, p.description, p.date_project, p.location_project,
@@ -56,8 +52,6 @@ const getUpcomingProjects = async (limit) => {
   return result.rows;
 };
 
-export { getUpcomingProjects };
-  
 const getProjectDetails = async (id) => {
   const sql = `
         SELECT p.project_id, p.title, p.description, p.date_project, p.location_project,
@@ -71,16 +65,14 @@ const getProjectDetails = async (id) => {
   return result.rows[0];
 };
 
-export { getProjectDetails };
-  
-const createProject = async (title, description, location, date, organizationId) => {
+const createProject = async (title, description, location_project, date_project, organizationId) => {
   const query = `
-      INSERT INTO project (title, description, location, date, organization_id)
+      INSERT INTO project (title, description, location_project, date_project, organization_id)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING project_id;
     `;
 
-  const queryParams = [title, description, location, date, organizationId];
+  const queryParams = [title, description, location_project, date_project, organizationId];
   const result = await db.query(query, queryParams);
 
   if (result.rows.length === 0) {
@@ -130,5 +122,11 @@ const updateProject = async (
   return result.rows[0];
 };
 
-export { createProject };
-export { updateProject };
+export {
+  getAllProjects,
+  getProjectsByOrganizationId,
+  getUpcomingProjects,
+  getProjectDetails,
+  createProject,
+  updateProject
+};
