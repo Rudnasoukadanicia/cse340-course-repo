@@ -37,7 +37,7 @@ VALUES
 (1, 'Education Program', 'Teach children', 'Los Angeles', '2026-08-05'),
 (1, 'Sports Event', 'Youth activities', 'San Diego', '2026-08-10'),
 (1, 'Tech Workshop', 'Coding basics', 'San Jose', '2026-08-15'),
-(1, 'Career Training', 'Job preparation', 'San Francisco', '2026-08-20');
+(1, 'Career Training', 'Job preparation', 'San Francisco', '2026-08-20'),
 
 -- ORGANIZATION 2 (GreenHarvest)
 (2, 'Tree Planting', 'Plant trees in city parks', 'New York', '2026-06-01'),
@@ -51,7 +51,7 @@ VALUES
 (3, 'School Support', 'Provide school supplies', 'Dallas', '2026-07-05'),
 (3, 'Clothing Donation', 'Donate clothes', 'Atlanta', '2026-07-10'),
 (3, 'Community Cooking', 'Cook for homeless', 'Houston', '2026-07-12'),
-(3, 'Elder Care', 'Assist elders', 'Phoenix', '2026-07-15'),
+(3, 'Elder Care', 'Assist elders', 'Phoenix', '2026-07-15');
 
 
 -- Create the categories table and the project_categories join table for the many-to-many relationship between projects and categories
@@ -102,3 +102,34 @@ VALUES
 (13, 3), -- Clothing Donation -> Social support (Health category)
 (14, 3), -- Community Cooking -> Health
 (15, 3); -- Elder Care -> Health
+
+
+-- Create the roles table
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT
+);
+
+INSERT INTO roles (role_name, role_description) VALUES 
+    ('user', 'Standard user with basic access'),
+    ('admin', 'Administrator with full system access');
+
+-- Create the users table
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name_users VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO users (name_users, email, password_hash, role_id) 
+VALUES ('testuser', 'test@example.com', 'placeholder_hash', 1);
+
+
+
+
+

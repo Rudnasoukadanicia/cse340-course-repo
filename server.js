@@ -12,7 +12,11 @@ const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
 const PORT = process.env.PORT || 3000;
 
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-secret';
+if (!process.env.SESSION_SECRET) {
+    console.warn('Warning: SESSION_SECRET is not set. Using default development secret. Set SESSION_SECRET in your environment for production.');
+}
+
 // get the current file path and directory
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,7 +48,7 @@ app.set('view engine', 'ejs');
 
 //Tell Express where to find the EJS templates
 app.set('views', path.join(__dirname, 'src/views'));
-   
+
 app.use((req, res, next) => {
     if (NODE_ENV === 'development') {
         console.log(`${req.method} ${req.url}`);
@@ -52,7 +56,16 @@ app.use((req, res, next) => {
     next();
 });
 
+// app.use((req, res, next) => {
+//     res.locals.NODE_ENV = NODE_ENV;
+//     next();
+// });
 app.use((req, res, next) => {
+    res.locals.isLoggedIn = false;
+    if (req.session && (req.session.user || req.session.userId)) {
+        res.locals.isLoggedIn = true;
+    }
+
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });

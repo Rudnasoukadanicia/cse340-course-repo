@@ -19,7 +19,8 @@ import {
     showNewCategoryForm,
     processNewCategoryForm,
     showEditCategoryForm,
-    processEditCategoryForm
+    processEditCategoryForm,
+
 } from './controllers/categories.js';
 
 // =======================
@@ -53,6 +54,10 @@ import {
 // =================
 import { categoryValidation } from './middleware/validators/categoryValidation.js';
 
+// =================
+// Controllers - Users  
+import { showUserRegistrationForm, processUserRegistrationForm } from './controllers/users.js';
+import { showLoginForm, processLoginForm, processLogout , requireLogin,showDashboard} from './controllers/users.js';
 
 // =================
 // Home
@@ -111,6 +116,16 @@ router.post('/new-project', projectValidation, processNewProjectForm);
 // ✅ Edit Project
 router.get('/edit-project/:id', showEditProjectForm);
 router.post('/edit-project/:id', projectValidation, processEditProjectForm);
+
+// =================
+// User Registration Routes
+// =================
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
+router.get('/dashboard', requireLogin, showDashboard);
 
 
 export default router;
