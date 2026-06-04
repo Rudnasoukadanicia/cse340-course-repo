@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+    <main>
+        <h1>
+            <%= title %>
+        </h1>
+
+        <table>
+            <tr>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+
+            <% users.forEach(user=> { %>
+                <tr>
+                    <td>
+                        <%= user.email %>
+                    </td>
+                    <td>
+                        <%= user.role_name %>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+    </main>
+
+    <%- include('partials/footer') %>

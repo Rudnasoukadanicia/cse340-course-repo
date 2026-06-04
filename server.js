@@ -2,113 +2,182 @@ import express from 'express';
 import session from 'express-session';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import db, { testConnection } from './src/models/db.js';
+
+import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
 import flash from './src/middleware/flash.js';
 
-// Define the the application environment
+// Environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
-
-
 const PORT = process.env.PORT || 3000;
 
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-secret';
+
 if (!process.env.SESSION_SECRET) {
-    console.warn('Warning: SESSION_SECRET is not set. Using default development secret. Set SESSION_SECRET in your environment for production.');
+    console.warn(
+        'Warning: SESSION_SECRET is not set. Using default development secret.'
+    );
 }
 
-// get the current file path and directory
-
+// Current file path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Allow Express to receive and process common POST data
+/**
+ * -----------------------------
+ * Express Configuration
+ * -----------------------------
+ */
+
+// Parse form and JSON data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Session configuration
+app.use(
+    session({
+        secret: SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            maxAge: 60 * 60 * 1000
+        }
+    })
+);
 
-app.use(session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
-}));
-
-// Apply flash middleware to all routes
+// Flash messages
 app.use(flash);
 
-// Set up session management
-
+// Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Set EJS as the templating engine
+// EJS
 app.set('view engine', 'ejs');
-
-//Tell Express where to find the EJS templates
 app.set('views', path.join(__dirname, 'src/views'));
+
+/**
+ * -----------------------------
+ * Development Logging
+ * -----------------------------
+ */
 
 app.use((req, res, next) => {
     if (NODE_ENV === 'development') {
         console.log(`${req.method} ${req.url}`);
+
+        console.log('--- request debug ---');
+        console.log('Host:', req.headers.host);
+        console.log('Cookie header:', req.headers.cookie);
+        console.log('SessionID:', req.sessionID);
+
+        try {
+            console.log(
+                'Session contents:',
+                JSON.stringify(req.session)
+            );
+        } catch {
+            console.log('Session contents: [unserializable]');
+        }
+
+        console.log('--- end debug ---');
     }
+
     next();
 });
 
-// app.use((req, res, next) => {
-//     res.locals.NODE_ENV = NODE_ENV;
-//     next();
-// });
+/**
+ * -----------------------------
+ * Variables Available in EJS
+ * -----------------------------
+ */
+
 app.use((req, res, next) => {
-    res.locals.isLoggedIn = false;
-    if (req.session && (req.session.user || req.session.userId)) {
-        res.locals.isLoggedIn = true;
-    }
+    res.locals.isLoggedIn =
+        !!(req.session && req.session.user);
 
-    res.locals.NODE_ENV = NODE_ENV;
+    res.locals.user =
+        req.session?.user || null;
+
+    res.locals.sessionID =
+        req.sessionID;
+
+    res.locals.session =
+        req.session;
+
+    res.locals.NODE_ENV =
+        NODE_ENV;
+
     next();
 });
 
-app.use(router);
+/**
+ * -----------------------------
+ * Application Routes
+ * -----------------------------
+ */
 
-// Catch-all route for 404 errors
+app.use('/', router);
+
+/**
+ * -----------------------------
+ * 404 Handler
+ * -----------------------------
+ */
+
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');
     err.status = 404;
     next(err);
 });
 
-// Global error handler
+/**
+ * -----------------------------
+ * Global Error Handler
+ * -----------------------------
+ */
+
 app.use((err, req, res, next) => {
-    // Log error details for debugging
     console.error('Error occurred:', err.message);
     console.error('Stack trace:', err.stack);
 
-    // Determine status and template
     const status = err.status || 500;
-    const template = status === 404 ? '404' : '500';
 
-    // Prepare data for the template
-    const context = {
-        title: status === 404 ? 'Page Not Found' : 'Server Error',
-        error: err.message,
-        stack: err.stack
-    };
-
-    // Render the appropriate error template
-    res.status(status).render(`errors/${template}`, context);
+    res.status(status).render(
+        `errors/${status === 404 ? '404' : '500'}`,
+        {
+            title:
+                status === 404
+                    ? 'Page Not Found'
+                    : 'Server Error',
+            error: err.message,
+            stack: err.stack
+        }
+    );
 });
+
+/**
+ * -----------------------------
+ * Start Server
+ * -----------------------------
+ */
 
 app.listen(PORT, async () => {
     try {
         await testConnection();
-        console.log(`Server is running at http://127.0.0.1:${PORT}`);
+
+        console.log(
+            `Server is running at http://127.0.0.1:${PORT}`
+        );
+
         console.log(`Environment: ${NODE_ENV}`);
     } catch (error) {
-        console.error('Error connecting to the database:', error);
-        process.exit(1); // Exit the process with an error code
+        console.error(
+            'Error connecting to the database:',
+            error
+        );
+
+        process.exit(1);
     }
 });
-
-

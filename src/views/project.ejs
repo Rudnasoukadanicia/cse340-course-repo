@@ -33,11 +33,14 @@
                 </li>
                 <% }) %>
         </ul>
+        <br>
+        <% if (user && user.role_name==='admin' ) { %>
         <p>
             <a href="/edit-project/<%= project.project_id %>">
                 Edit Project
                 </a>
         </p>
+        <% } %>
 
     </main>
 

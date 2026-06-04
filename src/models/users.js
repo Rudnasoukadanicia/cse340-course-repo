@@ -25,9 +25,10 @@ const createUser = async (name_users, email, passwordHash) => {
 
 const findUserByEmail = async (email) => {
     const query = `
-        SELECT user_id, name_users, email, password_hash, role_id 
-        FROM users 
-        WHERE email = $1
+        SELECT u.user_id, u.name_users, u.email, u.password_hash, u.role_id, r.role_name
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        WHERE u.email = $1
     `;
     const queryParams = [email];
 
@@ -58,4 +59,23 @@ const authenticateUser = async (email, password) => {
     return user; // Authentication successful
 };
 
-export { createUser, findUserByEmail, verifyPassword, authenticateUser };
+const getAllUsers = async () => {
+    const query = `
+        SELECT u.user_id, u.email, r.role_name
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        ORDER BY u.email;
+    `;
+
+    const result = await db.query(query);
+    return result.rows;
+};
+
+
+export {
+    createUser,
+    findUserByEmail,
+    verifyPassword,
+    authenticateUser,
+    getAllUsers
+};

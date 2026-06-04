@@ -22,15 +22,17 @@
                         <%= project.title %>
                     </a>
                 </li>
-            <% }) %>
+                <% }) %>
         </ul>
-        <p>
-            <a href="/edit-organization/<%= organization.organization_id %>">
-            Edit Organization
-            </a>
-        </p>
+        <br>
+        <% if (user && user.role_name==='admin' ) { %>
+            <p>
+                <a href="/edit-organization/<%= organization.organization_id %>">
+                    Edit Organization
+                </a>
+            </p>
+            <% } %>
 
     </main>
 
     <%- include('partials/footer') %>
-        

@@ -57,7 +57,9 @@ import { categoryValidation } from './middleware/validators/categoryValidation.j
 // =================
 // Controllers - Users  
 import { showUserRegistrationForm, processUserRegistrationForm } from './controllers/users.js';
-import { showLoginForm, processLoginForm, processLogout , requireLogin,showDashboard} from './controllers/users.js';
+import { showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard} from './controllers/users.js';
+import { showUsersPage, requireRole} from './controllers/users.js';
+
 
 // =================
 // Home
@@ -74,14 +76,6 @@ router.get('/test-error', testErrorPage);
 // =================
 router.get('/categories', categoriesPages);
 router.get('/category/:id', showCategoryDetailsPage);
-
-// ✅ Create Category
-router.get('/new-category', showNewCategoryForm);
-router.post('/new-category', categoryValidation, processNewCategoryForm);
-
-// ✅ Edit Category
-router.get('/edit-category/:id', showEditCategoryForm);
-router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
 // ✅ Assign Categories
 router.get('/assign-categories/:projectId', showAssignCategoriesForm);
@@ -114,7 +108,7 @@ router.get('/new-project', showNewProjectForm);
 router.post('/new-project', projectValidation, processNewProjectForm);
 
 // ✅ Edit Project
-router.get('/edit-project/:id', showEditProjectForm);
+router.get('/edit-project', showEditProjectForm);
 router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 
 // =================
@@ -127,5 +121,44 @@ router.post('/login', processLoginForm);
 router.get('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
 
+// Admin-only route example
+
+// Route for new organization page
+router.get('/new-organization', requireRole('admin'), showNewOrganizationForm);
+
+// Route to handle new organization form submission
+router.post('/new-organization', requireRole('admin'), organizationValidation, processNewOrganizationForm);
+
+//  route for new project page 
+router.get('/new-project', requireRole('admin'), showNewProjectForm);
+
+// Route to handle new project form submission
+router.post('/new-project/:id', requireRole('admin'), projectValidation, processNewProjectForm);
+
+// Route for new category page
+router.get('/new-category', requireRole('admin'), showNewCategoryForm);
+
+// Route to handle new category form submission
+router.post('/new-category/:id', requireRole('admin'), categoryValidation, processNewCategoryForm);
+
+// Route for edit organization page
+router.get('/edit-organization', requireRole('admin'), showEditOrganizationForm);
+
+// Route to handle edit organization form submission
+router.post('/edit-organization/:id', requireRole('admin'), organizationValidation, processEditOrganizationForm);
+
+// Route for edit project page
+router.get('/edit-project', requireRole('admin'), showEditProjectForm);
+
+// Route to handle edit project form submission
+router.post('/edit-project/:id', requireRole('admin'), projectValidation, processEditProjectForm);
+
+// route to handle edit category 
+router.get('/edit-category', requireRole('admin'), showEditCategoryForm);
+router.post('/edit-category/:id', requireRole('admin'), categoryValidation, processEditCategoryForm);
+
+// user used
+
+router.get('/users', requireRole('admin'), showUsersPage);
 
 export default router;

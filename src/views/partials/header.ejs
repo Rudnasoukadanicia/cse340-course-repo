@@ -20,6 +20,9 @@
 
         <% if (isLoggedIn) { %>
             <li><a href="/logout">Logout</a></li>
+            <% if (user) { %>
+                <li class="user-role">Logged in as <%= user.name || user.name_users %> (<%= user.role_name || user.roleName || 'user' %>)</li>
+            <% } %>
             <% } else { %>
                 <li><a href="/login">Login</a></li>
                 <li><a href="/register">Register</a></li>
