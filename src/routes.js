@@ -33,7 +33,9 @@ import {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
-    projectValidation
+    projectValidation,
+    volunteerProject,
+    removeVolunteerProject
 } from './controllers/projects.js';
 
 // ============================
@@ -132,5 +134,9 @@ router.get('/dashboard', requireLogin, showDashboard);
 // user used
 
 router.get('/users', requireRole('admin'), showUsersPage);
+
+// volunteer routes
+router.post('/project/:id/volunteer', requireLogin, volunteerProject);
+router.post('/project/:id/remove-volunteer', requireLogin, removeVolunteerProject);
 
 export default router;

@@ -130,6 +130,11 @@ INSERT INTO users (name_users, email, password_hash, role_id)
 VALUES ('testuser', 'test@example.com', 'placeholder_hash', 1);
 
 
+CREATE TABLE volunteer (
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    project_id INT REFERENCES project(project_id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, project_id)
+);
 
 
 

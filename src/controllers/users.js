@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser } from '../models/users.js';
-import { authenticateUser } from '../models/users.js';
-import { getAllUsers } from '../models/users.js';
+import { createUser, authenticateUser, getAllUsers, getUserVolunteerProjects } from '../models/users.js';
 
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
@@ -64,6 +62,7 @@ const processLoginForm = async (req, res) => {
         });
 
         req.session.user = {
+            user_id: user.user_id,
             userId: user.user_id,
             name: user.name_users,
             email: user.email,
@@ -112,13 +111,32 @@ const requireLogin = (req, res, next) => {
     }
     next();
 };
-const showDashboard = (req, res) => {
+
+const showDashboard = async (req, res) => {
     const user = req.session.user || {};
-    res.render('dashboard', {
-        title: 'Dashboard',
-        name: user.name || user.name_users || '',
-        email: user.email || ''
-    });
+    const userId = user.userId || user.user_id;
+
+    if (!userId) {
+        req.flash('error', 'User session not found. Please log in.');
+        return res.redirect('/login');
+    }
+
+    try {
+        const volunteerProjects = await getUserVolunteerProjects(userId);
+        console.log(req.session.user)
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            name: user.name || user.name_users || '',
+            email: user.email || '',
+            user,
+            volunteerProjects
+        });
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        req.flash('error', 'Unable to load dashboard. Please try again later.');
+        res.redirect('/');
+    }
 };
 
 const requireRole = (role) => {
